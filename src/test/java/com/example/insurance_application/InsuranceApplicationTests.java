@@ -1,4 +1,4 @@
-package com.example.InsuranceApplication;
+package com.example.insurance_application;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
