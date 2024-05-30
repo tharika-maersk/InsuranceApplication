@@ -14,16 +14,18 @@ import java.util.Objects;
 public class InsuranceApproveService {
     private InsuranceRepository insuranceRepository;
     private InsuranceApproveMapper insuranceApproveMapper;
-
+    private ServiceWorkflow serviceWorkflow;
     private static final Logger log = LoggerFactory.getLogger(InsuranceApproveService.class);
 
-    public InsuranceApproveService(InsuranceRepository insuranceRepository, InsuranceApproveMapper insuranceApproveMapper) {
+    public InsuranceApproveService(InsuranceRepository insuranceRepository, InsuranceApproveMapper insuranceApproveMapper, ServiceWorkflow serviceWorkflow) {
         this.insuranceRepository = insuranceRepository;
         this.insuranceApproveMapper = insuranceApproveMapper;
+        this.serviceWorkflow = serviceWorkflow;
     }
 
     public InsuranceApproveDto approveInsuranceRequest(Integer id, InsuranceApproveDto insuranceApproveDto){
         log.info("insurance review service triggered");
+        serviceWorkflow.insuranceApproveWorkflow(id.toString());
         var approveInsurance = insuranceApproveMapper.toInsurance(insuranceApproveDto);
         Insurance insurance = insuranceRepository.findById(id)
                 .orElse(null);

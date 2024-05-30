@@ -1,20 +1,26 @@
 package com.example.insurance_application;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.example.insurance_application.temporal.InsuranceActivity;
+import com.example.insurance_application.temporal.InsuranceWorkflow;
+import com.example.insurance_application.temporal.InsuranceWorkflowImpl;
+
+import io.temporal.worker.Worker;
+import io.temporal.worker.WorkerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 
 @SpringBootApplication
 public class InsuranceApplication {
 
-	private static final Logger log = LoggerFactory.getLogger(InsuranceApplication.class);
-
 	public static void main(String[] args) {
-
-		SpringApplication.run(InsuranceApplication.class, args);
-		log.info("hello world");
+		ConfigurableApplicationContext applicationContext = SpringApplication.run(InsuranceApplication.class, args);
+		WorkerFactory factory = applicationContext.getBean(WorkerFactory.class);
+		InsuranceActivity insuranceActivity = applicationContext.getBean(InsuranceActivity.class);
+		Worker worker = factory.newWorker(InsuranceWorkflow.TASK_QUEUE_NAME);
+		worker.registerWorkflowImplementationTypes(InsuranceWorkflowImpl.class);
+		worker.registerActivitiesImplementations(insuranceActivity);
+		factory.start();
 	}
-
 }

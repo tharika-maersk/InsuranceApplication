@@ -6,24 +6,28 @@ import com.example.insurance_application.dto.InsuranceReviewDto;
 import com.example.insurance_application.service.InsuranceApproveService;
 import com.example.insurance_application.service.InsuranceRequestService;
 import com.example.insurance_application.service.InsuranceReviewService;
+import com.example.insurance_application.temporal.InsuranceActivityImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class InsuranceAppController {
+
     private InsuranceRequestService insuranceRequestService;
     private InsuranceReviewService insuranceReviewService;
     private InsuranceApproveService insuranceApproveService;
+    private InsuranceActivityImpl insuranceActivity;
 
     private static final Logger log = LoggerFactory.getLogger(InsuranceAppController.class);
 
+    @Autowired
     public InsuranceAppController(InsuranceRequestService insuranceRequestService, InsuranceReviewService insuranceReviewService, InsuranceApproveService insuranceApproveService) {
         this.insuranceRequestService = insuranceRequestService;
         this.insuranceReviewService = insuranceReviewService;
         this.insuranceApproveService = insuranceApproveService;
     }
-
 
     @PostMapping("/createRequest")
     public InsuranceRequestDto createInsuranceRequest(
